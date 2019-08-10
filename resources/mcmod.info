@@ -1,0 +1,16 @@
+[
+{
+  "modid": "rftotime",
+  "name": "RF To Time",
+  "description": "Mod add RF Mechanics for mod In Time Presence.",
+  "version": "0.1a",
+  "mcversion": "1.12.2",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Rumaruka"],
+  "credits": "Thank you, ZigTheHedge, for your awesome mod",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": ["In Time Presence"]
+}
+]
