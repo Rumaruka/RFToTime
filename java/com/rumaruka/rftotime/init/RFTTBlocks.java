@@ -6,6 +6,7 @@ import com.cwelth.intimepresence.ModMain;
 import com.rumaruka.rftotime.api.Const;
 import com.rumaruka.rftotime.client.gui.RFTTCreativeTabs;
 import com.rumaruka.rftotime.common.blocks.RFShardProcessor;
+import com.rumaruka.rftotime.common.blocks.RFSteamHammer;
 import com.rumaruka.rftotime.common.blocks.TimeMachineForRF;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
@@ -23,6 +24,9 @@ import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import com.google.common.collect.ObjectArrays;
 import java.lang.reflect.Constructor;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Level;
 import com.google.common.base.Strings;
 public class RFTTBlocks {
@@ -31,22 +35,29 @@ public class RFTTBlocks {
 
     public static Block rfShardProcessor;
     public static Block time_machine_rf;
+    public static Block rfsteamhammer;
 
 
     public static void init(){
         rfShardProcessor = new RFShardProcessor().setCreativeTab(RFTTCreativeTabs.rfttCreativeTabs);
         time_machine_rf = new TimeMachineForRF().setCreativeTab(RFTTCreativeTabs.rfttCreativeTabs);
+        rfsteamhammer = new RFSteamHammer().setCreativeTab(RFTTCreativeTabs.rfttCreativeTabs);
 
     }
     public static void InGameRegister(){
         registerBlock(rfShardProcessor);
         registerBlock(time_machine_rf);
+        registerBlock(rfsteamhammer);
     }
 
 
     public static void renderBlocks(){
         registerRender(rfShardProcessor);
+        initShardProcessorItem(rfShardProcessor);
         registerRender(time_machine_rf);
+        initTMForRFItem(time_machine_rf);
+        registerRender(rfsteamhammer);
+        initModelHammerItem(rfsteamhammer);
 
 
 
@@ -116,10 +127,27 @@ public class RFTTBlocks {
         Item item = Item.getItemFromBlock(block);
         Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, new ModelResourceLocation(Const.MODID + ":" + item.getUnlocalizedName().substring(5), "inventory"));
     }
-    public static void registerINTPRender(Block b){
-        Item itemBlock = Item.REGISTRY.getObject(new ResourceLocation(ModMain.MODID, "timemachine"));
-        ModelResourceLocation itemModelResourceLocation = new ModelResourceLocation(b.getRegistryName(), "inventory");
-        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(itemBlock, 0, itemModelResourceLocation);
+    public static void initModelHammerItem(Block block){
+        Item item = Item.REGISTRY.getObject(new ResourceLocation(Const.MODID,"rf_steamhammer"));
 
+        ModelResourceLocation itemModelResourceLocation = new ModelResourceLocation(block.getRegistryName(), "inventory");
+        final int DEFAULT_ITEM_SUBTYPE = 0;
+        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, DEFAULT_ITEM_SUBTYPE, itemModelResourceLocation);
+    }
+
+    public static void initTMForRFItem(Block block){
+        Item item = Item.REGISTRY.getObject(new ResourceLocation(Const.MODID,"timemachine_rf"));
+
+        ModelResourceLocation itemModelResourceLocation = new ModelResourceLocation(block.getRegistryName(), "inventory");
+        final int DEFAULT_ITEM_SUBTYPE = 0;
+        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, DEFAULT_ITEM_SUBTYPE, itemModelResourceLocation);
+    }
+
+    public static void initShardProcessorItem(Block block){
+        Item item = Item.REGISTRY.getObject(new ResourceLocation(Const.MODID,"rfshardprocessor"));
+
+        ModelResourceLocation itemModelResourceLocation = new ModelResourceLocation(block.getRegistryName(), "inventory");
+        final int DEFAULT_ITEM_SUBTYPE = 0;
+        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, DEFAULT_ITEM_SUBTYPE, itemModelResourceLocation);
     }
 }

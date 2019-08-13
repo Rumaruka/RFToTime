@@ -4,6 +4,7 @@ package com.rumaruka.rftotime;
 
 import com.rumaruka.rftotime.api.Const;
 import com.rumaruka.rftotime.init.RFTTBlocks;
+import com.rumaruka.rftotime.init.RFTTRecipes;
 import com.rumaruka.rftotime.init.RFTTTiles;
 import com.rumaruka.rftotime.network.SyncRFShardProcessor;
 import com.rumaruka.rftotime.proxy.CommonProxy;
@@ -18,7 +19,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 
-@Mod(modid = Const.MODID,name = "RF To Time",version = "0.1a",dependencies = "required-after:intimepresence@[1.2,)")
+@Mod(modid = Const.MODID,name = "RF To Time",version = "0.1b",dependencies = "required-after:intimepresence@[1.25,)")
 public class RFToTime {
     @Mod.Instance(Const.MODID)
     public static RFToTime instance;
@@ -53,5 +54,6 @@ public class RFToTime {
     public void postInit(FMLPostInitializationEvent e)
     {
         proxy.postInit(e);
+        RFTTRecipes.setup();
     }
 }

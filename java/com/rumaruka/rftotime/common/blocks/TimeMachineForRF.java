@@ -70,10 +70,10 @@ public class TimeMachineForRF extends CommonTEBlock<TimeMachineTEForRF> {
     }
 
     @SideOnly(Side.CLIENT)
-    public void initItemModel() {
+    public static void initItemModel() {
 
         Item itemBlock = Item.REGISTRY.getObject(new ResourceLocation(ModMain.MODID, "timemachine"));
-        ModelResourceLocation itemModelResourceLocation = new ModelResourceLocation(getRegistryName(), "inventory");
+        ModelResourceLocation itemModelResourceLocation = new ModelResourceLocation("timemachine", "inventory");
         Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(itemBlock, 0, itemModelResourceLocation);
     }
 

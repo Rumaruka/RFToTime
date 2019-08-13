@@ -4,16 +4,23 @@ import com.cwelth.intimepresence.blocks.TimeMachine;
 import com.cwelth.intimepresence.items.AllItems;
 import com.cwelth.intimepresence.network.SyncTESRAnim;
 import com.cwelth.intimepresence.tileentities.CommonTE;
+import com.rumaruka.rftotime.api.CustomEnergyFE;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-public class TimeMachineTEForRF extends CommonTE implements ITickable {
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+public class TimeMachineTEForRF extends CommonTE implements ITickable {
     public int caseLevel = 0;
     public boolean isPowered = false;
     public ItemStack caseSlot = ItemStack.EMPTY;
@@ -69,15 +76,19 @@ public class TimeMachineTEForRF extends CommonTE implements ITickable {
                                 int timeToShare = 10;
                                 if (ate.timeStored < timeToShare) timeToShare = ate.timeStored;
                                 NBTTagCompound nbt = caseSlot.getTagCompound();
-                                nbt.setInteger("charge", nbt.getInteger("charge") + timeToShare);
-                                ate.timeStored -= timeToShare;
-                                ate.markDirty();
-                                ate.sendUpdates();
-                                if (isOffline) {
-                                    isOffline = false;
-                                    markDirty();
-                                    sendUpdates();
-                                    world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
+                                if(nbt != null) {
+                                    nbt.setInteger("charge", nbt.getInteger("charge") + timeToShare);
+                                    ate.timeStored -= timeToShare;
+                                    ate.markDirty();
+                                    ate.sendUpdates();
+                                    if (isOffline) {
+                                        isOffline = false;
+                                        markDirty();
+                                        sendUpdates();
+                                        world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
+                                    }
+                                } else {
+                                    ModMain.logger.warning("Something weird: " + caseSlot.toString());
                                 }
                             } else
                             {
@@ -145,6 +156,7 @@ public class TimeMachineTEForRF extends CommonTE implements ITickable {
             caseSlot = is.copy();
             isTimeBatteryPresent = true;
             setActive(isPowered);
+            world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
             return ItemStack.EMPTY;
         } else
         {
@@ -152,6 +164,7 @@ public class TimeMachineTEForRF extends CommonTE implements ITickable {
             caseSlot = ItemStack.EMPTY;
             isTimeBatteryPresent = false;
             setActive(isPowered);
+            world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
             return ret;
         }
     }

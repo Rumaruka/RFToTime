@@ -5,6 +5,7 @@ import com.cwelth.intimepresence.items.AllItems;
 import com.cwelth.intimepresence.network.SyncTESRAnim;
 import com.cwelth.intimepresence.tileentities.CommonTE;
 
+import com.rumaruka.rftotime.RFTTConfig;
 import com.rumaruka.rftotime.RFToTime;
 import com.rumaruka.rftotime.api.CustomEnergyFE;
 import com.rumaruka.rftotime.client.gui.RFShardProcessorIH;
@@ -31,10 +32,10 @@ public class RFShardProcessorTE extends CommonTE implements ITickable, ICapabili
     public int timeStored = 0;
     public BlockPos attachedTE = null;
     public boolean isGUIopened = false;
-    private boolean isWorking;
+
     private int clientEnergy = -1;
 
-    private CustomEnergyFE energy = new CustomEnergyFE(100_000, 25);
+    private CustomEnergyFE energy = new CustomEnergyFE(RFTTConfig.MAX_POWER_SHARDPROCESSOR, RFTTConfig.MAX_RECIEVE_SHARDPROCESSOR);
 
     public ItemStackHandler enderPearlSlot = new ItemStackHandler(1){
         @Override
@@ -98,7 +99,7 @@ public class RFShardProcessorTE extends CommonTE implements ITickable, ICapabili
             markDirty();
             sendUpdates();
         }
-        if(pearlTime > 0 && burnTime > 0)
+        if(pearlTime > 0 && burnTime > 0 && energy.getEnergyStored()>0)
         {
             pearlTime--;
             if(shardTime == 0) {
@@ -113,15 +114,17 @@ public class RFShardProcessorTE extends CommonTE implements ITickable, ICapabili
             markDirty();
             sendUpdates();
         }
-        if(shardTime > 0 && pearlTime > 0 && burnTime > 0)
+        if(shardTime > 0 && pearlTime > 0 && burnTime > 0 &&energy.getEnergyStored()>0)
         {
 
-
+            energy.extractEnergyInternal(burnTime,false);
             shardTime--;
             timeStored++;
             markDirty();
             sendUpdates();
         }
+
+
     }
 
     public void sendUpdates()
@@ -145,9 +148,9 @@ public class RFShardProcessorTE extends CommonTE implements ITickable, ICapabili
         if(compound.hasKey("pearlStackHandler")) enderPearlSlot.deserializeNBT((NBTTagCompound)compound.getTag("pearlStackHandler"));
         if(compound.hasKey("shardsStackHandler")) dimshardsSlot.deserializeNBT((NBTTagCompound)compound.getTag("shardsStackHandler"));
         if(compound.hasKey("attachedTE")) attachedTE = NBTUtil.getPosFromTag((NBTTagCompound)compound.getTag("attachedTE"));
+        if(compound.hasKey("energy"))        energy.setEnergy(compound.getInteger("energy"));
 
         else attachedTE = null;
-        energy.setEnergy(compound.getInteger("energy"));
     }
 
     @Override

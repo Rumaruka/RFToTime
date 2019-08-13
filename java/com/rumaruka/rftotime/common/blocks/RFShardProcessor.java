@@ -11,6 +11,7 @@ import com.rumaruka.rftotime.common.tiles.TimeMachineTEForRF;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,6 +21,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -29,12 +32,14 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 
 public class RFShardProcessor extends CommonTEBlock<RFShardProcessorTE> {
 
 
     public RFShardProcessor() {
         super(Material.IRON,"rfshardprocessor");
+
     }
 
     @Override
@@ -47,7 +52,13 @@ public class RFShardProcessor extends CommonTEBlock<RFShardProcessorTE> {
     public RFShardProcessorTE createTileEntity(World world, IBlockState iBlockState) {
         return new RFShardProcessorTE();
     }
+    @SideOnly(Side.CLIENT)
+    public static void initItemModel() {
 
+        Item itemBlock = Item.REGISTRY.getObject(new ResourceLocation(ModMain.MODID, "shardprocessor"));
+        ModelResourceLocation itemModelResourceLocation = new ModelResourceLocation("shardprocessor", "inventory");
+        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(itemBlock, 0, itemModelResourceLocation);
+    }
     @Nullable
     @Override
     @SideOnly(Side.CLIENT)
@@ -128,4 +139,15 @@ public class RFShardProcessor extends CommonTEBlock<RFShardProcessorTE> {
             InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), te.dimshardsSlot.getStackInSlot(0));
         }
     }
+
+    @Override
+    public boolean isNormalCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
 }
+
