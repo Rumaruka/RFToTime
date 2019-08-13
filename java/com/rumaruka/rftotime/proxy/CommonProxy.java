@@ -16,12 +16,17 @@ import java.io.File;
 
 public class CommonProxy {
 
+
+    public static Configuration configuration;
+
     public CommonProxy(){
 
     }
 
     public void preInit(FMLPreInitializationEvent e) {
-
+        File dir = e.getModConfigurationDirectory();
+        configuration = new Configuration(new File(dir.getPath(),"rftotime.cfg"));
+        RFTTConfig.readConfig();
 
     }
 
@@ -29,6 +34,9 @@ public class CommonProxy {
     }
     public void postInit(FMLPostInitializationEvent e) {
 
+        if(configuration.hasChanged()){
+            configuration.save();
+        }
 
     }
 
