@@ -16,7 +16,6 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import net.minecraftforge.registries.GameData;
 public class RecipeAPI {
-
     public static void addShapedOreRecipe(ItemStack output, Object... params) {
         ResourceLocation location = getNameForRecipe(output);
         ShapedOreRecipe recipe = new ShapedOreRecipe(location, output, params);
